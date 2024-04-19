@@ -22,9 +22,13 @@ def handle_client(conn,addr):
         if msg_length: 
             msg_length = int(msg_length)
             msg = conn.recv(msg_length).decode(FORMAT)
-            if msg == DISCONNECT_MSG:
-              connected = False
-            print(f"{addr} - {msg}")   
+            if msg == "GET / HTTP/1.1":
+                with open("index.html", "r") as file:
+                    response = file.read()
+                conn.send(response.encode(FORMAT))
+            elif msg == DISCONNECT_MSG:
+                connected = False
+            print(f"{addr} - {msg}")             
     conn.close()
 
 def start():
